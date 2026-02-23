@@ -118,19 +118,71 @@ function updateDashboard() {
 }
 // make cards
 
-function changeStatus(id, status) {
-  const job = jobs.find((j) => j.id === id);
-  job.status = job.status === status ? "all" : status;
-  renderJobs();
-  updateDashboard();
+function renderJobs() {
+  jobsContainer.innerHTML = "";
+
+  const filtered =
+    currentTab === "all" ? jobs : jobs.filter((j) => j.status === currentTab);
+
+  if (filtered.length === 0) {
+    jobsContainer.innerHTML = `
+      <div class="col-span-full text-center py-16 text-gray-500">
+        <div class="text-5xl mb-4">📂</div>
+        <h3 class="text-xl font-semibold">No Jobs Available</h3>
+        <p class="text-sm">There are no jobs in this section right now.</p>
+      </div>
+    `;
+    return;
+  }
+
+  filtered.forEach((job) => {
+    const div = document.createElement("div");
+    div.className = "bg-white p-6 rounded-xl shadow hover:shadow-lg transition";
+
+    div.innerHTML = `
+    <div class="flex justify-between items-start">
+
+    <div>
+     <h3 class="text-xl font-bold mb-1">${job.position}</h3>
+      <p class="text-gray-600 font-semibold">${job.companyName}</p>
+      <p class="text-sm text-gray-500">${job.location} • ${job.type}</p>
+      <p class="text-blue-600 font-semibold mt-2">${job.salary}</p>
+      <p class="text-gray-600 text-sm mt-2">${job.description}</p>
+   <span class="px-3 py-1 text-xs font-semibold rounded-full
+      ${
+        job.status === "interview"
+          ? "bg-green-100 text-green-700"
+          : job.status === "rejected"
+            ? "bg-red-100 text-red-700"
+            : "bg-gray-200 text-gray-700"
+      }">
+      ${job.status === "all" ? "Pending" : job.status.toUpperCase()}
+    </span>
+      <div class="flex gap-2 mt-4 flex-wrap">
+        <button onclick="changeStatus(${job.id}, 'interview')" 
+          class="px-3 py-1 rounded-lg text-green-700 ${job.status === "interview" ? "border-2 border-green-700 " : "border-2 border-green-700 "}">
+          Interview
+        </button>
+
+        <button onclick="changeStatus(${job.id}, 'rejected')" 
+          class="px-3 py-1 rounded-lg text-red-500 ${job.status === "rejected" ? " border-2 border-red-700" : " border-2 border-red-700"}">
+          Rejected
+        </button>
+      </div></div>
+        <button onclick="deleteJob(${job.id})" 
+          class="px-3 py-1 rounded-lg bg-gray-600 text-white">
+          Delete
+        </button>
+    </div>
+     
+    `;
+
+    jobsContainer.appendChild(div);
+  });
 }
+
 // delete
-function deleteJob(id) {
-  const index = jobs.findIndex((j) => j.id === id);
-  jobs.splice(index, 1);
-  renderJobs();
-  updateDashboard();
-}
+
 
 updateDashboard();
 renderJobs();
