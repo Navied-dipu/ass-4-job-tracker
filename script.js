@@ -170,7 +170,7 @@ function renderJobs() {
         </button>
       </div></div>
         <button onclick="deleteJob(${job.id})" 
-          class="px-3 py-1 rounded-lg bg-gray-600 text-white">
+          class="px-3 py-1 rounded-lg bg-red-600 text-white">
           Delete
         </button>
     </div>
