@@ -82,6 +82,21 @@ const jobs = [
   },
 ];
 let currentTab = "all";
+document.querySelectorAll(".tab").forEach((tab) => {
+  tab.addEventListener("click", function () {
+    document.querySelectorAll(".tab").forEach((t) => {
+      t.classList.remove("bg-blue-600", "text-white");
+      t.classList.add("bg-gray-200");
+    });
+
+    this.classList.remove("bg-gray-200");
+    this.classList.add("bg-blue-600", "text-white");
+
+    currentTab = this.dataset.tab;
+    renderJobs();
+    updateDashboard();
+  });
+});
 const jobsContainer = document.getElementById("jobsContainer");
 function updateDashboard() {
   const total = jobs.length;
@@ -137,14 +152,10 @@ function renderJobs() {
         job.status === "interview"
           ? "bg-green-100 text-green-700"
           : job.status === "rejected"
-          ? "bg-red-100 text-red-700"
-          : "bg-gray-200 text-gray-700"
+            ? "bg-red-100 text-red-700"
+            : "bg-gray-200 text-gray-700"
       }">
-      ${
-        job.status === "all"
-          ? "Pending"
-          : job.status.toUpperCase() 
-      }
+      ${job.status === "all" ? "Pending" : job.status.toUpperCase()}
     </span>
       <div class="flex gap-2 mt-4 flex-wrap">
         <button onclick="changeStatus(${job.id}, 'interview')" 
@@ -181,21 +192,6 @@ function deleteJob(id) {
   renderJobs();
   updateDashboard();
 }
-document.querySelectorAll(".tab").forEach((tab) => {
-  tab.addEventListener("click", function () {
-    document.querySelectorAll(".tab").forEach((t) => {
-      t.classList.remove("bg-blue-600", "text-white");
-      t.classList.add("bg-gray-200");
-    });
-
-    this.classList.remove("bg-gray-200");
-    this.classList.add("bg-blue-600", "text-white");
-
-    currentTab = this.dataset.tab;
-    renderJobs();
-    updateDashboard();
-  });
-});
 
 updateDashboard();
-renderJobs()
+renderJobs();
