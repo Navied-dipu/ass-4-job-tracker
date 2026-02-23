@@ -180,7 +180,12 @@ function renderJobs() {
     jobsContainer.appendChild(div);
   });
 }
-
+function changeStatus(id, status) {
+  const job = jobs.find((j) => j.id === id);
+  job.status = job.status === status ? "all" : status;
+  renderJobs();
+  updateDashboard();
+}
 // delete
 
 
